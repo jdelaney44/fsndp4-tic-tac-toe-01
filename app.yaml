@@ -1,0 +1,89 @@
+# This file specifies your Python application's runtime configuration
+# including URL routing, versions, static file uploads, etc. See
+# https://developers.google.com/appengine/docs/python/config/appconfig
+# for details.
+
+# TODO: Enter your application id below. If you have signed up
+# using cloud.google.com/console use the "project id" for your application
+# id.
+
+application: fsndp4-tic-tac-toe-01
+version: 1
+runtime: python27
+threadsafe: true
+api_version: 1
+
+# Tried 'python-compat' 03-Aug, no go
+
+handlers:
+# Static assets
+- url: /favicon\.ico
+  static_files: favicon.ico
+  upload: favicon\.ico
+  
+- url: /js
+  static_dir: static/js
+- url: /css
+  static_dir: static/css
+- url: /images
+  static_dir: static/images
+
+
+- url: /
+  static_files: templates/tictactoe.html
+  upload: templates/tictactoe\.html
+  secure: always
+
+# This url is for the API demo page and can be removed
+# if the demo is not needed
+- url: /demo
+  static_files: demo/API_demo_01.html
+  upload: templates/API_demo_01\.html
+  secure: always
+
+#- url: /scratch05
+#  static_files: templates/scratch05.html
+#  upload: templates/scratch05\.html
+#  secure: always
+
+#- url: /
+#  static_files: templates/index.html
+#  upload: templates/index\.html
+#  secure: always
+
+# Endpoints handler
+# 'script:' is the name of the .py file
+# where the APIs are defined
+# syntax - script:[file_name].[INSTANCE_VARIABLE_FOR_APPLICATION]
+
+# - url: /_ah/spi/.*
+#   script: tictactoe_api.APPLICATION
+#   secure: always
+  
+- url: /_ah/spi/.*
+  script: main.APPLICATION
+  secure: always
+
+- url: /tasks/cache_average_attempts
+  script: main.app
+
+- url: /crons/send_reminder
+  script: main.app
+
+# Libraries
+libraries:
+- name: pycrypto
+  version: latest
+
+- name: endpoints
+  version: latest
+
+- name: webapp2
+  version: latest
+
+- name: protorpc
+  version: latest
+
+
+ 
+

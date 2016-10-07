@@ -1,0 +1,159 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="utf-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+   <meta name="description" content="TicTacToe">
+   <meta name="author" content="John Delaney">
+   <title>TicTacToe</title>
+</head>
+<link rel="stylesheet" href="/css/base.css" />
+<!-- Bootstrap - Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+   integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+   crossorigin="anonymous">
+<!-- Bootstrap - Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+   integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
+   crossorigin="anonymous">
+<!-- jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script>
+window.jQuery || document.write(
+   '<script src="../../assets/js/vendor/jquery.min.js"><\/script>')
+</script>
+<!-- Bootstrap - Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+   integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+   crossorigin="anonymous" type="text/javascript"></script>
+<!-- Google App Engine Javascript API -->
+<script src="https://apis.google.com/js/api.js" type="text/javascript"></script>
+
+<!-- Portions of this file adapted from the project:
+https://github.com/GoogleCloudPlatform/appengine-endpoints-tictactoe-python.git
+See that project for further attributions
+See the LICENSE.txt file for the applicable license -->
+
+<body>
+   <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+         <div class="navbar-header">
+            <a href="#" class="navbar-label">Tic Tac Toe</a>
+            <a class="auth-label"></a>
+            <a id="user_label" class="auth-label">Not logged in</a>
+            <button type="button" class="btn btn-default btn-xs pull-right" id="authorize_button"
+               name="authorize_button">Login</button>
+            <button type="button" class="btn btn-default btn-xs pull-right" id="signout_button"
+               name="singout_button">Log Out</button>
+         </div>
+      </div>
+   </nav>
+   <div id="content" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+      <div class="container-fluid">
+         <div class="row">
+            <div id="auth_warning">
+               <img id="auth_warning_graphic" src="/images/exclamation01.png" alt="" />
+               <p>Please sign in to play the game</p>
+               <p>Psst ... you need a Google ID ...</p>
+               <p>This works WAY better on Google Chrome!</p>
+            </div>
+            <div id="board" name="board" class="row hidden">
+               <table>
+                  <tr>
+                     <td class="no-top-border no-left-border square">-</td>
+                     <td class="no-top-border square">-</td>
+                     <td class="no-top-border no-right-border square">-</td>
+                  </tr>
+                  <tr>
+                     <td class="no-left-border square">-</td>
+                     <td class="square">-</td>
+                     <td class="no-right-border square">-</td>
+                  </tr>
+                  <tr>
+                     <td class="no-bottom-border no-left-border square">-</td>
+                     <td class="no-bottom-border square">-</td>
+                     <td class="no-bottom-border no-right-border square">-</td>
+                  </tr>
+               </table>
+               <table>
+                  <tbody>
+                     <tr>
+                        <td id="game_message" colspan="3">Hi!</td>
+                     </tr>
+                     <tr>
+                     	<td class="board-button-cell">
+                           <div id="board_btn_left_2" class="btn btn-default btn-xs navbar-btn navbar-center">
+                              <a>New Game</a>
+                           </div>
+                        </td>
+                        <td class="board-button-cell">
+                           <div id="board_btn_left_1" class="btn btn-default btn-xs navbar-btn navbar-center">
+                              <a>Reset</a>
+                           </div>
+                        </td>
+                        <td class="board-button-cell">
+                           <div id="board_btn_right_1" class="btn btn-default btn-xs navbar-btn navbar-center">
+                              <a>Cancel Game</a>
+                           </div>
+                        </td>
+                     </tr>
+                  </tbody>
+               </table>
+            </div>
+         </div>
+         <div id="lower_board_wrapper" class="hidden">
+            <nav class="navbar navbar-inverse navbar-middle" id="lower-navbar">
+               <div class="container-fluid">
+                  <div class="nav nav-tabs navbar-header" id="lower-navbar-header">
+                     <ul class="nav nav-tabs">
+                        <li role="presentation" id="tab-ln-1" class="active li-ln">
+                           <a class="tab-ln">Games</a>
+                        </li>
+                        <li role="presentation" id="tab-ln-2" class="li-ln">
+                           <a class="tab-ln">Top Scores</a>
+                        </li>
+                        <li role="presentation" id="tab-ln-3" class="li-ln">
+                           <a class="tab-ln">Top Ranks</a>
+                        </li>
+                        <a display="inline-block" id="score_label" class="score-label">Your Score:</a>
+                        <a display="inline-block" id="user_score" class="score-label">- - -</a>
+                     </ul>
+                  </div>
+               </div>
+            </nav>
+            <div class="table-responsive">
+               <table class="table table-striped" id="lower_table">
+                  <thead id="lower_table_header">
+                     <tr>
+                        <th id="ltcl_1">No.</th>
+                        <th id="ltcl_2">Status</th>
+                        <th id="ltcl_3">Moves</th>
+                        <th id="ltcl_4">
+                           <div class="btn btn-default btn-xs navbar-btn" id="replay_button">
+                              Replay
+                           </div>
+                        </th>
+                        <th id="ltcl_5">
+                           <div class="btn btn-default btn-xs navbar-btn" id="hide_button">
+                              Hide
+                           </div>
+                        </th>
+                     </tr>
+                  </thead>
+                  <tbody id="lower_table_body">
+                  </tbody>
+               </table>
+            </div>
+         </div>
+      </div>
+   </div>
+</body>
+<!-- Load the game up after the base document is there -->
+<script type="text/javascript" src="/js/auth.js"></script>
+<script type="text/javascript" src="/js/base.js"></script>
+<script src="https://apis.google.com/js/api.js?onload=handleClientLoad" type="text/javascript"></script>
+
+</html>

@@ -1,0 +1,141 @@
+# Design Motivations
+## I wanted a UI
+This turned out to be a bigger decision than I anticipated. However, as I want to be a full stack developer I figured it was about time to take a swing at a full stack application deployed on the Google Cloud Platform no matter how simple it might be. I also wanted to be sure the APIs would actually work with a UI and present information in a way that would be useful in a user facing app.
+
+## Keep it as simple as possible
+At first I was thinking about a Battle Ship style game. After a few pages of pseudo code and flow diagrams it became apparent that I was missing the point of the project, which I believe is to build an API service that could in theory be exposed to others as a web service. 
+
+###Tic Tac Toe
+As a result I decided to go with Tic Tac Toe. There is a good starter app in Google's repository that uses the endpoints API, has very rudimentary game logic, and at least the basics of an UI. Of course this had to be merged with the Guess-A-Number coded.
+
+###What I added to the starter code
+* An entire set of functions to make the game smarter, more competitive, and keep score; something not inherent to Tic Tac Toe.
+* UI elements to display scoring and ranking data
+* A game play back feature to leverage the project requirements to record moves and be able to retrieve them
+* Multiple active UI features to help let the user know what is going on including active colors and messaging
+* Of course more advanced styling leveraging Bootstrap
+* All of the required JavaScript to make all the UI elements work
+* Additional properties & methods, some are discussed below
+
+# Changes to models
+## models as a Package
+As the file count grew, the repository became difficult to deal with. Also, it became obvious that having large files just leads to errors induced by typos and accidental key hits while looking for the code you want. So the models file and others, were split up, put in their own sub directories with __init__.py files so they could serve as modules. 
+
+This also had the effect of cleaning up the imports across the board. This means you have a much better idea of what each file really needs and what's really going on there. 
+
+## Additional model
+### move.Move
+Move was added so we could record the moves. There are many, many more moves than anything else. While this could have been put on the Game object as a pickle / blob I felt that presented issues later in case I needed to debug. Having the moves available in the Data Store Viewer has proven to be helpful. Further, it will allow analysis of move patterns more easily later. This would be more relevant in something like Chess or maybe even Candy Crush ;-). 
+
+Move is updated every time a new move is requested, which requires that the then current board string is submitted.
+
+Move has these properties:
+***game_key*** - This is the foreign key to Game
+
+***board_string*** - This is the string that stores the board state. In the case of Tic Tac Toe, this is only nine characters
+
+***move_number*** - This is incremented every time the user make a move
+
+## Model property changes
+### Game
+#### Properties removed
+target, attempts_allowed, attempts_remaining, and game_over were removed. None were required for a tic tac toe style game except game_over. The functionality of game_over was replaced with a combination of game_status, and game_active.
+
+
+#### Properties added
+***game_status*** - String - Used to hold the game status. Values used are 'started', 'player_win', 'machine_win', and 'cancelled'. I went with this rather than have several boolean flags partly because then there were fewer fields to pass between the API & the UI. Probably a push either way.
+
+***score_key*** - KeyProperty - Foreign key to Score
+
+***move_record_keys*** - KeyProperty - Foreign keys to Move. This uses the repeated property provided by the ndb api & Datastore
+
+***game_active*** - Boolean - It's used to flag the game as active or not which is used in determining which games to use in various queries.
+
+***game_number*** - Integer - Incremental number assigned to each game when it is created. Allows for sorting. This was chosen over a datetime object to simplify sorting at the higher game level.
+
+###User###
+####Properties removed
+None
+
+####Properties added
+***cumulative_score*** - Integer - The cumulative score for all games played, basic requirement for score keeping & ranking
+***games_played*** - Integer - The number of games played, used for tie computing rank
+
+***games_won*** - Integer - The number of games won used for resolving ties during ranking
+
+***games_lost*** - Integer - The number of games lost  used for resolving ties during ranking
+
+***rank_index*** - Integer - The computed rank of the user/player as compared to other users. Rank indexes are computed as each game is completed. This is done to allow some cycles to be saved when ranks are queried. 
+
+###Score##
+####Properties removed (or revised)
+***user*** - revised to 'player'
+
+***guesses*** - revised to score
+
+***won*** - moved to Game
+
+***guesses*** - revised to move_count
+
+####Properties added
+***start_date*** - DateTime - The start date & time of game play, used for sorting under the game
+
+***end_date*** - DateTime - Well, if you have a start, it seems like you need an end. Not currently used. It is supplied by the APIs.
+
+***player_name*** - ComputedProperty - This and the next three properties are computed when changes are put() to a Score entity. These are here for query purposes. This appears to relieve the query of work thus speeding it up a bit. Somewhat like the idea behind a SQL view. 
+
+***game_number*** - ComputedProperty
+
+***game_status*** - ComputedProperty
+
+***game_active*** - ComputedProperty
+
+# Design Conundrums & Trade-offs:
+### Ancestor relationship -vs- foreign key like relationships
+This was my single most challenging and time consuming issue. 
+
+Data Store implements foreign keys with the `ndb.KeyProperty`. It does not differentiate between parent or child in this way. 
+
+Data store also supports what they call an ancestor relationship. 
+
+Ancestor relationships are not specified in the model class itself. Instead they are created when a model class is instantiated like so:
+
+(Assume a models for Player and Game have been built elsewhere and that you've already got a player_key)
+
+`my_game_instance = Game(parent=player_key) ` 
+
+Stick with me here ... 
+
+My Game model, now, looks like this:
+```
+class Game(ndb.Model):
+    """Game object"""
+    board = ndb.StringProperty(required=False, default='---------')
+    game_status = ndb.StringProperty(required=True, default='started')
+    player = ndb.KeyProperty(required=True, kind='User')
+    score_key = ndb.KeyProperty(required=False, kind=Score)
+    move_record_keys = ndb.KeyProperty(
+        required=False, repeated=True, kind=Move)
+    game_active = ndb.BooleanProperty(required=True, default=True)
+    game_number = ndb.IntegerProperty(required=True, default=0)
+```
+
+If I left it that way the above instance declaration would create a Parent holding `player_key` and I'd get an error because I did not supply something for `player`. So I'd want to remove `player` from the model:
+
+```
+class Game(ndb.Model):
+    """Game object"""
+    board = ndb.StringProperty(required=False, default='---------')
+    game_status = ndb.StringProperty(required=True, default='started')
+    score_key = ndb.KeyProperty(required=False, kind=Score)
+    move_record_keys = ndb.KeyProperty(
+        required=False, repeated=True, kind=Move)
+    game_active = ndb.BooleanProperty(required=True, default=True)
+    game_number = ndb.IntegerProperty(required=True, default=0)
+```
+
+If you do this and look at the Game entity in the Datastore Viewer you'll see a readonly field called `Parent`and it will contain the `player_key` you passed to it. 
+
+Here's my problem with this. After several attempts I was able to query game via player ('down'), but I was not able to get at player via game ('up'). Documentation indicates that it should work, but I could not get it to work as I needed it to. Specifically I wanted to then get something like `Parent.email`. That usually produced an error telling me it wanted something of type 'Node'. 
+
+So, I decided to give up on that and go with the `ndb.KeyProperty` relationship style. 

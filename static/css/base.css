@@ -1,0 +1,362 @@
+html {
+    max-width: 100%;
+    margin: auto;
+}
+
+/*
+ * Top navigation
+ * Hide default border to remove 1px line.
+ */
+.navbar-fixed-top {
+    border: 0;
+    padding-right: 1em;
+}
+
+/* 
+ * Move down content because we have a fixed navbar that is 30px tall 
+ */
+body {
+    margin: auto;
+    padding-top: 30px;
+}
+
+body>nav {
+    max-height: 2.5em;
+    line-height: 2.5em;
+    width: 100%;
+    margin: auto;
+}
+
+body>nav.navbar {
+    min-height: 10px;
+    margin-bottom: 0;
+    padding-right: .5em;
+}
+
+/*
+ * .navbar-toggle is apparently referenced by something
+ * in the bootstrap css model, don't delete
+ */
+.navbar-inverse .navbar-toggle {
+    font-size: .25em;
+    margin-left: 5%;
+    margin-right: 5%;
+    width: 90%;
+    height: 1px;
+}
+
+.navbar {
+    min-height: 30px;
+}
+
+
+/* 
+ * Login / auth styles 
+ */
+
+#auth_list_item {
+    padding-left: 10px;
+}
+
+.auth-label {
+    color: #9d9d9d;
+    font-size: .7em;
+    padding-left: 5px;
+    padding: 0 .5em 0 .5em;
+    margin: auto;
+}
+
+#user_label>a {
+    color: #9d9d9d;
+}
+
+.navbar-label {
+    color: #9d9d9d;
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-left: 7px;
+    padding-right: 5px;
+}
+
+/*
+ * Initial element visibility
+ * overrides bootstrap
+ */
+.hidden {
+    display: none !important;
+}
+
+
+#content {
+    width: 100%;
+    margin: auto;
+    padding: 1px;
+}
+
+#content>div.container-fluid {
+    padding-right: 0;
+    padding-left: 0;
+    margin: auto;
+    margin-right: 0;
+    margin-left: 0;
+}
+
+
+#board,
+#auth_warning {
+	min-height: 290px;
+    margin-top: 1.25em;
+    margin-right: auto;
+    margin-bottom: 0;
+    margin-left: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /*
+	// display: box;
+    // box-orient: vertical;
+    // box-align: center;
+	// display: -webkit-box;
+    // -webkit-box-orient: vertical;
+    // -webkit-box-align: center;
+    // display: -moz-box;
+    // -moz-box-orient: vertical;
+    // -moz-box-align: center; 
+    */
+
+}
+
+#auth_warning_graphic {
+	margin: auto;
+	padding: .5em 0 .5em 0;    height: 7em;
+    width: 7em;
+}
+
+
+/* 
+ * Board grid / squares styles 
+ */
+table {
+    text-align: center;
+    padding: 5pt 0pt;
+    border-spacing: 0pt;
+}
+
+td.square {
+	font-size: 1em;
+    width: 5em;
+    height: 5em;
+    border: 2pt solid #000;
+    -webkit-transition: all .1s;
+    -moz-transition: all .1s;
+    transition: all .1s;
+    background: #ffffff;
+}
+
+td.square:hover {
+    background: #D3E3E8;
+}
+
+td.square:active {
+    background: #CFF4FF;
+}
+
+td.no-top-border {
+    border-top: 0pt;
+}
+
+td.no-right-border {
+    border-right: 0pt;
+}
+
+td.no-left-border {
+    border-left: 0pt;
+}
+
+td.no-bottom-border {
+    border-bottom: 0pt;
+}
+
+/*
+ * Message appearing below the game grid
+ */
+#game_message {
+    height: .7em;
+    padding: .25em 0 0 0;
+    font-size: 10pt;
+    font-weight: normal;
+}
+
+/*
+ * For the lower part of the page
+ */
+#lower_board_wrapper {
+    background-color: whiteSmoke;
+}
+
+#lower-navbar {
+    border: 0;
+    min-height: 0;
+    max-height: 26px;
+    font-size: 1em;
+    margin-bottom: 0px;
+}
+
+#lower-navbar>div.container-fluid {
+    height: 26px;
+    padding-right: 5px;
+    padding-left: 0;
+}
+
+#lower-navbar-header {
+    font-size: 1em;
+    height: 26px;
+    width: 100%;
+    margin-right: 0;
+    margin-left: 0;
+    padding-right: 0;
+    padding-left: 0;
+    vertical-align: middle;
+    border-bottom: none;
+}
+
+#lower-navbar-header>a.navbar-brand {
+    font-size: 13pt;
+    height: 20px;
+    padding: 1px;
+    padding-left: 15px;
+    vertical-align: middle;
+    line-height: normal;
+}
+
+#lower-navbar-header > ul > li > a {
+    padding: 1px 5px 1px 5px;
+    margin: 2px 0 0 2px;
+    height: 22px;
+}
+
+/*
+ * For tabs in the lower nav header
+ */
+#lower-navbar-header > ul.nav-tabs {
+    border-bottom: none;
+}
+
+.tab-ln {
+    font-size: .8em;
+    background-color: #c8c7c9;
+}
+
+.tab-ln.active {
+    background-color: #e9e9e9;
+}
+
+/*
+ * Lower table / score table header
+ */
+
+#lower_table_header {
+    font-size: .7em;
+}
+
+#lower_table_header>tr>th {
+    text-align: center;
+}
+
+/*
+ * Column lables
+ */
+#ltcl_1,
+#ltcl_2,
+#ltcl_3,
+#ltcl_4,
+#ltcl_5 {
+    padding: 2px;
+}
+
+.score-label {
+    font-size: .7em;
+    color: #ffffff;
+    padding-left: .5em;
+    vertical-align: middle;
+    align: right;
+}
+
+#lower_table_body {
+    font-size: .7em;
+}
+
+#lower_table_body>tr>td {
+    vertical-align: middle;
+    padding: 2px;
+    padding-bottom: 2px;
+}
+
+
+
+/*
+ * Button Styles
+ */
+
+#authorize_button,
+#signout_button {
+    font-size: .7em;
+    /* 	padding: 0 2px 0 2px; */
+    margin: auto;
+    /*	margin-right: 0; */
+    height: 1.7em;
+    line-height: 1em;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    vertical-align: middle;
+}
+
+#board_btn_left_2,
+#board_btn_left_1,
+#board_btn_right_1,
+#board_btn_right_2 {
+    font-size: .9em;
+    /* 	min-width: 5em; */
+    max-height: 20px;
+    margin: .5em 0 1em 0;
+    padding: 0 2px 1px 2px;
+}
+
+#board_btn_left_2,
+#board_btn_left_1 {
+    margin-right: .25em;
+    margin-left: .25em;
+}
+
+#board_btn_right_1,
+#board_btn_right_2 {
+    margin-right: .25em;
+    margin-left: .25em;
+}
+
+#replay_button,
+#hide_button
+{
+    font-size: .9em;
+    max-height: 20px;
+    margin: 0;
+    padding: 0 1px 0 1px;
+    margin: 3px;
+}
+
+#lower_row_active_game{
+	background-color:  #ccffff;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

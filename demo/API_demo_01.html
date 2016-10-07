@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en"> 
+	<!-- Google App Engine Javascript API -->
+	<script src="https://apis.google.com/js/api.js" type="text/javascript"></script>
+		
+    <body style='margin: auto;'>
+    	<!-- Welcome message and login / out buttons  -->
+        <a style='padding:10px;'>Welcome to the API demo page</a><br>
+        <a id="user_label" class="auth-label" style='padding:10px;'>Not logged in</a>
+        <div style='padding:10px;'>
+            <button type="button" id="authorize_button"
+                       name="authorize_button">Login</button>
+            <button type="button" id="signout_button"
+                       name="singout_button">Log Out</button>
+        </div>
+        <!-- DEMO Developers Look Here!!! Input box & buttons -->
+        <div style='padding:10px;'>
+            <input type='text' id = 'email' value= 'Enter user e-mail' style='width: 250px;'>
+        </div>
+        <div style='padding:10px;'>
+            <input type='text' id = 'name' value= 'Enter name' style='width: 250px;'>
+        </div>
+        <!-- Button that uses the Javascript above -->
+        <div style='padding:10px;'>
+        	<input type='submit' id='button_01' value = "Submit">
+        </div>
+        <div id='your_message' style='padding:10px;'>Response message will appear here</div>
+    </body>
+    <!-- Script for submitting request on button click -->
+  	<script>	
+	    createUser = function() {
+	    	var user_email = document.getElementById("email").value;
+	        var user_name = document.getElementById("name").value;
+	        // call create_user api
+	        fsnd.t3.ttt.create_user({
+	            'user_name': user_name,
+	            'user_email': user_email
+	        }).execute(function(message) {
+	            your_message = document.getElementById('your_message');
+	            your_message.innerHTML='<a>'+ message.message + '</a>';
+	        });
+	    };
+	    // Assign the script as the click handler for the button
+	    var button = document.getElementById("button_01");
+	    button.onclick=createUser;
+    </script>
+    <!-- Loading the scripts from the app  -->
+    <script type="text/javascript" src="/js/base.js"></script>
+    <script type="text/javascript" src="/js/auth.js"></script>
+    <!-- IMPORTANT! This initializes the Google Javascript API -->
+    <script type="text/javascript" src="https://apis.google.com/js/api.js?onload=handleClientLoad" ></script>
+</html>
