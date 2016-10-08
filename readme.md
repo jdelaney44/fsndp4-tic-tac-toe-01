@@ -1,7 +1,7 @@
 ##Welcome to TicTacToe##
 This is the repo for my Udacity FSND project 4 (old structure), Design a Game submittal. This project has been implemented as a Tic Tac Toe game. This game is deployed on `appspot.com`. URL forwarded to project reviewer privately.
 
-Known Issues:
+##Known Issues:##
 
   Private / Incognito Modes:
 
@@ -15,7 +15,7 @@ Known Issues:
 
   Other than some inherent GAE slowness everything on Chrome & Firefox appears to work okay. I may move this to hybrid Google Firebase / GCP model or a more standard Linux, Apache, PostgreSQL, Python stack sometime in November of 2016 depending on other work load. 
 
-
+##Outside Sources:##
 Sections of this readme requiring additional information or detail will contain either links to 3rd party source documents or links to this project's Wiki pages. We're going to try to keep this readme brief but useful.
 
 ##Playing the game:##
