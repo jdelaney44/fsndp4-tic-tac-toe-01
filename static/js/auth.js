@@ -28,24 +28,62 @@ var authorizeButton = document.getElementById("authorize_button");
 var signoutButton = document.getElementById("signout_button");
 
 /**
+ * Check to see if browser is allowing us to set storage
+ * If not alert user that browser settings may be an issue
+ */
+
+
+
+
+/**
  * Initializes an instance Google JavaScript API auth object
  */
 function initAuth() {
+  if (typeof localStorage === 'object') {
+    try {
+        localStorage.setItem('localStorage', 1);
+        localStorage.removeItem('localStorage');
+    } catch (e) {
+        Storage.prototype._setItem = Storage.prototype.setItem;
+        Storage.prototype.setItem = function() {};
+        alert('Bummer! .. Logging into the game is not working now.\n\n' +
+            'Your browser security probably does not allow this.\n\n' +
+            'Please check the security settings and try again.\n\n' + 
+            '*Hint* - You may be in Private or Incognito mode.\n\n' + 
+            'Or, maybe try a different kind of www browser. Thanks!');       
+    }
+  }
+  
+  
+  
+  try{
     gapi.client.setApiKey(apiKey);
+
     // Get the auth instance 
-    gapi.auth2.init({
-        client_id: fsnd.t3.CLIENT_ID,
-        scope: scopes
-    }).then(function () {
-        auth_instance = gapi.auth2.getAuthInstance();
-        // Listen for sign-in state changes.
-        auth_instance.isSignedIn.listen(updateSigninStatus);
-        // Handle the initial sign-in state.
-        updateSigninStatus(auth_instance.isSignedIn.get()); 
-        authorizeButton.onclick = handleAuthClick;
-        signoutButton.onclick = handleSignoutClick;
-    });
-}
+
+      gapi.auth2.init({
+          client_id: fsnd.t3.CLIENT_ID,
+          scope: scopes
+      }).then(function () {
+  
+            auth_instance = gapi.auth2.getAuthInstance();
+  
+          // Listen for sign-in state changes.
+          auth_instance.isSignedIn.listen(updateSigninStatus);
+          // Handle the initial sign-in state.
+          updateSigninStatus(auth_instance.isSignedIn.get()); 
+          authorizeButton.onclick = handleAuthClick;
+          signoutButton.onclick = handleSignoutClick;
+      });
+
+
+  } catch (e) {
+    alert('Bummer! .. Logging into the game is not working now.\n\n' +
+        'Your browser security probably does not allow this.\n\n' +
+        'Please check the security settings and try again.\n\n' + 
+        'Or, maybe try a different kind of www browser. Thanks!');
+  };
+};
 
 /**
  * Updates the sign in status of the user in the "name space"
@@ -89,5 +127,11 @@ function handleSignoutClick(event) {
  */
 function handleClientLoad() {
     // Load the API client and auth library
+  try{
     gapi.load('client:auth2', initAuth);
+  } catch (e){
+    alert('Your web browser seems to be in private mode.\n\n' +
+        'Logging in to this game is not supported in this mode.\n\n' +
+        'Please change settings and try again.');
+  }
 }
