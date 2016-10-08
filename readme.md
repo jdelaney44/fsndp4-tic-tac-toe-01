@@ -1,5 +1,5 @@
 ##Welcome to TicTacToe - Not even Beta!##
-This is the repo for my Udacity FSND project 4 (old structure), Design a Game submittal. This project has been implemented as a Tic Tac Toe game. This game is deployed on `appspot.com`. URL forwarded to project reviewer privately.
+This is the repo for my Udacity FSND project 4 (old structure), Design a Game submittal. This project has been implemented as a Tic Tac Toe game. This game is deployed on `appspot.com`.
 
 ##Known Issues:##
 
