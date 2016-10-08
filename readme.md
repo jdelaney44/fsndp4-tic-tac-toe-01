@@ -13,7 +13,11 @@ This is the repo for my Udacity FSND project 4 (old structure), Design a Game su
 
   * In testing one user on an iPhone 6, IOS 10.0.2 cannot get past authentication. 
 
-  Other than some inherent GAE slowness everything on Chrome & Firefox appears to work okay. I may move this to hybrid Google Firebase / GCP model or a more standard Linux, Apache, PostgreSQL, Python stack sometime in November of 2016 depending on other work load. 
+**Google Cloud Platform (GCP) Slowness:**
+
+  *  GCP simply has some inherent issues in spinning up instances & threads, especially in free or smaller instances, or so it would seem. Then there is the "eventual consistency" model. There are some config tweaks that need to be looked at to be sure.
+
+  * I may move this to hybrid Google Firebase / GCP model. Firebase is Googles solution set for app like this requiring more immediate data base responses. I may also go with a more standards based Linux, Apache, PostgreSQL, Python stack depending on other work load. 
 
 ##Outside Sources:##
 Sections of this readme requiring additional information or detail will contain either links to 3rd party source documents or links to this project's Wiki pages. We're going to try to keep this readme brief but useful.
